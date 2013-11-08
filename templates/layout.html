@@ -9,25 +9,27 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
-    <div class="navbar-header">
-    <a class="navbar-brand" href="{{ url_for('index') }}">
-        <img alt="slymoose logo" src="{{ url_for('static', filename='img/slymoose.png') }}">
-        SlyMoose.com
-    </a>
-    </div>
-    <ul class="nav nav-pills navbar-nav" style="padding-top: 5em;">
-        {% for link in links %}
-        {% if link.endpoint == 'index' %}
-        <li><a href="{{ url_for(link.endpoint) }}">Home</a></li>
-        {% else %}
-        <li><a href="{{ url_for(link.endpoint) }}">{{ link.endpoint|title }}</a></li>
-        {% endif %}
-        {% else %}
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        {% endfor %}
-    </ul>
-</nav>
+<header class="container">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img alt="slymoose logo" src="{{ url_for('static', filename='img/slymoose.png') }}">
+                SlyMoose.com
+            </a>
+        </div>
+        <ul class="nav nav-pills navbar-nav" style="padding-top: 5em;">
+            {% for link in links %}
+            {% if link.endpoint == 'index' %}
+            <li><a href="{{ url_for(link.endpoint) }}">Home</a></li>
+            {% else %}
+            <li><a href="{{ url_for(link.endpoint) }}">{{ link.endpoint|title }}</a></li>
+            {% endif %}
+            {% else %}
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+</header>
 
     <div class="container">
         {% block content %}
