@@ -1,25 +1,28 @@
-from flask import Flask, render_template, url_for
+"""Slymoose website"""
+from flask import Flask, render_template, url_for, request
 
 app = Flask(__name__)
-app.debug = True
 
 def goodrule(rule):
     return (len((rule.defaults or [])) >= len(rule.arguments))
 
-@app.route("/games")
-def games():
-    return "games!"
-
-@app.route("/images")
-def images():
-    return "images!"
-
-@app.route("/videos")
-def videos():
-    return "videos!"
+def getlinks():
+    rules = app.url_map.iter_rules()
+    return sorted([rule for rule in rules if goodrule(rule)])
 
 @app.route("/")
 def index():
-    rules = app.url_map.iter_rules()
-    links = [rule.endpoint for rule in rules if goodrule(rule)]
-    return render_template('index.html', links=links)
+    return render_template(
+        'index.html', links=getlinks(), title="SlyMoose")
+
+@app.route("/games")
+def games():
+    return render_template('page.html', links=getlinks())
+
+@app.route("/images")
+def images():
+    return render_template('page.html')
+
+@app.route("/videos")
+def videos():
+    return render_template('page.html')

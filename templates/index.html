@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-    <meta charset="utf-8" />
-</head>
-<body>
-    <h1>Index</h1>
-    <ul>
-        {% for link in links %}
-        <li><a href="{{ link }}">{{ link }}</a></li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+    <h1>{{ title }}</h1>
+{% endblock content %}

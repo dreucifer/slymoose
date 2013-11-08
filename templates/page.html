@@ -1,0 +1,5 @@
+{% extends 'layout.html' %}
+{% block title %}{{ request.endpoint|title }}{% endblock title %}
+{% block content %}
+    <h1>{{ request.endpoint|title }}</h1>
+{% endblock content %}

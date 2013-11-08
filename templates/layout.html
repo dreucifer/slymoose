@@ -3,14 +3,39 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <h1>Index</h1>
-    <ul>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
+        <img alt="slymoose logo" src="{{ url_for('static', filename='img/slymoose.png') }}">
+        SlyMoose.com
+    </a>
+    </div>
+    <ul class="nav nav-pills navbar-nav" style="padding-top: 5em;">
         {% for link in links %}
-        <li><a href="{{ link }}">{{ link }}</a></li>
+        {% if link.endpoint == 'index' %}
+        <li><a href="{{ url_for(link.endpoint) }}">Home</a></li>
+        {% else %}
+        <li><a href="{{ url_for(link.endpoint) }}">{{ link.endpoint|title }}</a></li>
+        {% endif %}
+        {% else %}
+        <li><a href="{{ url_for('index') }}">Home</a></li>
         {% endfor %}
     </ul>
+</nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/boostrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/modernizer-2.6.2-response-1.1.0.min.js') }}"></script>
 </body>
 </html>
 
