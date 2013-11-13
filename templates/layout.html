@@ -1,43 +1,56 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
     <title>{% block title %}{% endblock %}</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
+    <meta charset='utf-8' />
+    <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/bootstrap.min.css') }}'>
+    <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/bootstrap-theme.min.css') }}'>
+    <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/main.css') }}'>
+    </head>
+
 <body>
+    <header class='container'>
+        {% block header %}
+        <nav class='navbar navbar-default' role='navigation'>
+            <div class='navbar-header'>
+                <a class='navbar-brand' href='{{ url_for('index') }}'>
+                    <img alt='slymoose logo' src='{{ url_for('static', filename='img/slymoose.png') }}'>
+                </a>
+            </div>
+            <input type='search' placeholder='Search'>
+            <input type='username' placeholder='username'>
+            <input type='password' placeholder='password'>
+            <br class='clear'>
+            <ul class='nav nav-pills navbar-nav'>
+                {% for link in get_links() %}
+                {% if link.endpoint == 'index' %}
+                <li><a href='{{ url_for(link.endpoint) }}'>Home</a></li>
+                {% else %}
+                <li><a href='{{ url_for(link.endpoint) }}'>{{ link.endpoint|title }}</a></li>
+                {% endif %}
+                {% else %}
+                <li><a href='{{ url_for('index') }}'>Home</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endblock header %}
+        {% block navigation %}{% endblock navigation %}
+    </header>
 
-<header class="container">
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <img alt="slymoose logo" src="{{ url_for('static', filename='img/slymoose.png') }}">
-                SlyMoose.com
-            </a>
-        </div>
-        <ul class="nav nav-pills navbar-nav" style="padding-top: 5em;">
-            {% for link in links %}
-            {% if link.endpoint == 'index' %}
-            <li><a href="{{ url_for(link.endpoint) }}">Home</a></li>
-            {% else %}
-            <li><a href="{{ url_for(link.endpoint) }}">{{ link.endpoint|title }}</a></li>
-            {% endif %}
-            {% else %}
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            {% endfor %}
-        </ul>
-    </nav>
-</header>
-
-    <div class="container">
+    <div class='container'>
         {% block content %}
         {% endblock content %}
     </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/boostrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/modernizer-2.6.2-response-1.1.0.min.js') }}"></script>
+
+    <footer class='navbar navbar-inverse navbar-fixed-bottom'>
+        <div class='container'>
+            test
+        </div>
+    </footer>
+
+    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}'></script>
 </body>
 </html>
 

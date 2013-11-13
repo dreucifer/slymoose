@@ -1,28 +1,12 @@
 """Slymoose website"""
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.admin import Admin
 
-app = Flask(__name__)
+app = Flask('slymoose')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///slymoose.db'
+app.secret_key = 'super_secret'
+db = SQLAlchemy(app)
+admin = Admin(app)
 
-def goodrule(rule):
-    return (len((rule.defaults or [])) >= len(rule.arguments))
-
-def getlinks():
-    rules = app.url_map.iter_rules()
-    return sorted([rule for rule in rules if goodrule(rule)])
-
-@app.route("/")
-def index():
-    return render_template(
-        'index.html', links=getlinks(), title="SlyMoose")
-
-@app.route("/games/")
-def games():
-    return render_template('page.html', links=getlinks())
-
-@app.route("/images/")
-def images():
-    return render_template('page.html', links=getlinks())
-
-@app.route("/videos/")
-def videos():
-    return render_template('page.html', links=getlinks())
+import slymoose.views
