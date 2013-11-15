@@ -1,3 +1,5 @@
+{% from '_formhelpers.html' import render_field %}
+{% from '_formhelpers.html' import render_login %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,9 +30,15 @@
                     <img alt='slymoose logo' src='{{ url_for('static', filename='img/slymoose.png') }}'>
                 </a>
             </div>
-            <input type='search' placeholder='Search'>
-            <input type='username' placeholder='username'>
-            <input type='password' placeholder='password'>
+            <div class='navbar-form navbar-right'>
+                <form class='form-inline' role='form' method='POST' action='/login'>
+                    {{ login.csrf_token }}
+                    {{ render_login(login.username, class_='form-control imput-sm', placeholder='Username') }}
+                    {{ render_login(login.password, class_='form-control imput-sm', placeholder='Password') }}
+                    <button class='btn btn-default btn-sm input-sm' type='submit'>login</button>
+                    <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
+                </form>
+            </div>
             <br class='clear'>
             <ul class='nav nav-pills navbar-nav'>
                 {% for link in get_links() %}

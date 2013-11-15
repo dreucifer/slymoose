@@ -1,7 +1,6 @@
 """Slymoose website"""
 from flask import Flask, render_template, url_for, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.admin import Admin
 from flask.ext.login import LoginManager
 
 app = Flask('slymoose')

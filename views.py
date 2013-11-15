@@ -25,8 +25,7 @@ admin.add_view(AdminModelView(User, db.session))
 
 def goodrule(rule):
     return (
-        len((rule.defaults
-            or [])) >= len(rule.arguments)) and 'admin' not in str(rule)
+        len((rule.defaults or [])) >= len(rule.arguments)) and 'admin' not in str(rule) and rule.redirect_to is None
 
 
 @app.template_global()
@@ -38,14 +37,15 @@ def get_links():
 @app.template_global()
 def get_categories(endpoint):
     return sorted(
-        (Categories.query.filter(Categories.endpoint == endpoint).all()
+        (Category.query.filter(Category.endpoint == endpoint).all()
             or []), key=lambda x: x.slug)
 
 
 @app.route('/')
 def index():
+    login = LoginForm()
     return render_template(
-        'index.html', title='SlyMoose')
+        'index.html', title='SlyMoose', login=login)
 
 
 @app.route('/games/', defaults={'category_name': 'index'})
@@ -53,6 +53,7 @@ def index():
 @app.route('/games/play/<int:game_id>')
 @app.route('/games/<category_name>')
 def games(**kwargs):
+    login = LoginForm()
     if kwargs:
         category_name = kwargs.get('category_name', None)
         game_id = kwargs.get('game_id', None)
@@ -60,17 +61,19 @@ def games(**kwargs):
         if category_name:
             if category_name == 'play':
                 return redirect(url_for('games'))
-    return render_template('games.html')
+    return render_template('games.html', login=login)
 
 
 @app.route('/images/')
 def images():
-    return render_template('page.html')
+    login = LoginForm()
+    return render_template('page.html', login=login)
 
 
 @app.route('/videos/')
 def videos():
-    return render_template('page.html')
+    login = LoginForm()
+    return render_template('page.html', login=login)
 
 
 @app.route('/logout')
@@ -82,26 +85,29 @@ def logout():
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        login_user(form.user)
+    login = LoginForm()
+    if login.validate_on_submit():
+        login_user(login.user)
         flash('Logged in successfully')
         return redirect(request.args.get('next') or url_for('index'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', login=login)
 
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
+    login = LoginForm()
+    registration = RegistrationForm()
+    if registration.validate_on_submit():
         user = User(
-            form.username.data, form.email.data, form.password.data)
+            registration.username.data,
+            registration.email.data,
+            registration.password.data)
         db.session.add(user)
         flash('Thanks for registering')
         try:
             db.session.commit()
         except IntegrityError:
-            form.email.errors.append('Email Already in Use')
-            return render_template('register.html', form=form)
+            registration.email.errors.append('Email Already in Use')
+            return render_template('register.html', registration=registration, login=login)
         return redirect(url_for('login'))
-    return render_template('register.html', form=form)
+    return render_template('register.html', registration=registration, login=login)
