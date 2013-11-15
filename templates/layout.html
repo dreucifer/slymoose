@@ -9,6 +9,17 @@
     </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            <p>
+                {{ message }}
+            </p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
     <header class='container'>
         {% block header %}
         <nav class='navbar navbar-default' role='navigation'>

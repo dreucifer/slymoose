@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% from '_formhelpers.html' import render_field %}
+{% block content %}
+
+<form class="form-inline" role="form" method="POST">
+    {{ form.csrf_token }}
+    {{ render_field(form.username, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
+    {{ render_field(form.password, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
+    <button class="btn btn-default btn-sm input-sm" type="submit">login</button>
+</form>
+{% endblock %}
