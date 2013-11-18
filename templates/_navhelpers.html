@@ -1,0 +1,9 @@
+{% macro render_categories(endpoint) %}
+    {% with categories = get_categories(endpoint) %}
+    <ul id='categories' class='nav nav-pills'>
+        {% for category in categories %}
+        <li><a href='{{ url_for(category.endpoint, category_name=category.slug) }}'>{{ category }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endwith %}
+{% endmacro %}

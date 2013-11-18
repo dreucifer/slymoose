@@ -1,5 +1,6 @@
 {% from '_formhelpers.html' import render_field %}
 {% from '_formhelpers.html' import render_login %}
+{% from '_navhelpers.html' import render_categories %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,13 +12,14 @@
     </head>
 
 <body>
+<div id="wrapper">
     {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-            <div class='alert alert-info alert-dismissible'>
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ message }}
-            </div>
-            {% endfor %}
+    {% for message in messages %}
+    <div class='alert alert-info alert-dismissible'>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
     {% endwith %}
     <header class='container'>
         {% block header %}
@@ -30,13 +32,13 @@
             <div class='navbar-form navbar-right'>
                 <form class='form-inline' role='form' method='POST' action='/login'>
                     {% if not is_logged_in() %}
-                    {{ login.csrf_token }}
-                    {{ render_login(login.username, class_='form-control imput-sm', placeholder='Username') }}
-                    {{ render_login(login.password, class_='form-control imput-sm', placeholder='Password') }}
-                    <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
-                    <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
+                        {{ login_form.csrf_token }}
+                        {{ render_login(login_form.username, class_='form-control imput-sm', placeholder='Username') }}
+                        {{ render_login(login_form.password, class_='form-control imput-sm', placeholder='Password') }}
+                        <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
+                        <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
                     {% else %}
-                    <a class='btn btn-default btn-sm input-sm' href='{{ url_for('logout') }}'>log out <span class='.glyphicon .glyphicon-log-out'></span></a>
+                        <a class='btn btn-default btn-sm input-sm' href='{{ url_for('logout') }}'>log out <span class='.glyphicon .glyphicon-log-out'></span></a>
                     {% endif %}
                 </form>
             </div>
@@ -54,17 +56,20 @@
             </ul>
         </nav>
         {% endblock header %}
-        {% block navigation %}{% endblock navigation %}
+        {% block navigation %}
+            {{ render_categories(request.endpoint) }}
+        {% endblock navigation %}
     </header>
 
     <div id='content' class='container'>
         {% block content %}
         {% endblock content %}
     </div>
+</div>
 
-    <footer class='navbar navbar-inverse navbar-fixed-bottom'>
+    <footer class='footer'>
         <div class='container'>
-            test
+            &copy; 2013 Slymoose Entertainment
         </div>
     </footer>
 

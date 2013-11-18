@@ -1,26 +1,8 @@
-{% extends 'layout.html' %}
-{% block title %}{{ request.endpoint|title }}{% endblock title %}
-{% block navigation %}
-    {% with categories = get_categories(request.endpoint) %}
-    <ul class='nav nav-pills'>
-        {% for category in categories %}
-        <li><a href='{{ url_for(request.endpoint, category_name=category.slug) }}'>{{ category }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endwith %}
-{% endblock navigation %}
+{% extends 'page.html' %}
+{% block title %}
+Directory of Games
+{% endblock title %}
 {% block content %}
-    {% if game %}
-    <h1>{{ game.slug|title }}</h1>
-    {{ game.content|safe }}
-
-    {% else %}
-    <h1>{{ request.endpoint|title }}</h1>
-
-    {% if pages %}
-        {% for page in pages %}
-        <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page }}</a>
-        {% endfor %}
-    {% endif %}
-    {% endif %}
-{% endblock content %}
+    <h1>Free Web Games</h1>
+    <p>Click on a category above for free web games</p>
+{% endblock %}

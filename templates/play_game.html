@@ -1,0 +1,7 @@
+{% extends 'page.html' %}
+{% block content %}
+    {% if game %}
+        <h1>{{ game.slug|title }}</h1>
+        {{ game.content|markdown }}
+    {% endif %}
+{% endblock %}

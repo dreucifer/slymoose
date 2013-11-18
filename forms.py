@@ -1,5 +1,8 @@
+from flask import flash
+from sqlalchemy.exc import IntegrityError
 from flask_wtf import Form
 from wtforms import BooleanField, TextField, PasswordField, validators
+from slymoose import db
 from slymoose.models import User
 
 class RegistrationForm(Form):
@@ -12,6 +15,26 @@ class RegistrationForm(Form):
     confirm = PasswordField('Repeat Password')
     accept_tos = BooleanField('I accept the TOS', [validators.Required()])
 
+    def validate(self):
+        from slymoose.views import is_logged_in
+        if not Form.validate(self):
+            return False
+        if is_logged_in():
+            return False
+        user = User(
+            self.username.data,
+            self.email.data,
+            self.password.data)
+        db.session.add(user)
+        flash('Thanks for registering')
+        try:
+            db.session.commit()
+        except IntegrityError:
+            self.email.errors.append('Email Already in Use')
+            flash('Registration failed')
+            return False
+        return True
+
 
 class LoginForm(Form):
     username = TextField('Username', [validators.Length(min=4, max=25)])
@@ -22,8 +45,7 @@ class LoginForm(Form):
         self.user = None
 
     def validate(self):
-        rv = Form.validate(self)
-        if not rv:
+        if not Form.validate(self):
             return False
 
         user = self.get_user()

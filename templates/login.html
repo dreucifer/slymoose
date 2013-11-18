@@ -3,9 +3,9 @@
 {% block content %}
 
 <form class="form-inline" role="form" method="POST">
-    {{ login.csrf_token }}
-    {{ render_field(login.username, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
-    {{ render_field(login.password, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
+    {{ login_form.csrf_token }}
+    {{ render_field(login_form.username, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
+    {{ render_field(login_form.password, class_='form-control col-md-1 imput-sm', placeholder='Username') }}
     <button class="btn btn-default btn-sm input-sm" type="submit">login</button>
 </form>
 {% endblock %}

@@ -2,7 +2,6 @@ from flask import render_template, redirect, url_for, flash, request
 from flask.ext.admin import Admin, AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.login import login_user, logout_user, current_user
-from sqlalchemy.exc import IntegrityError
 from slymoose import app, db
 from slymoose.models import Pages, Category, User
 from slymoose.forms import RegistrationForm, LoginForm
@@ -37,7 +36,6 @@ def goodrule(rule):
     else:
         if rule.endpoint == 'logout':
             response = False
-
     return response
 
 
@@ -49,9 +47,13 @@ def get_links():
 
 @app.template_global()
 def get_categories(endpoint):
-    return sorted(
-        (Category.query.filter(Category.endpoint == endpoint).all()
-            or []), key=lambda x: x.slug)
+    if endpoint != 'index':
+        return sorted(
+            (Category.query.filter(Category.endpoint == endpoint).all()
+                or []), key=lambda x: x.slug)
+    else:
+        return sorted(
+                (Category.query.all() or []), key=lambda x: x.slug)
 
 
 @app.template_global()
@@ -61,16 +63,16 @@ def is_logged_in():
 
 @app.route('/')
 def index():
-    login = LoginForm()
+    login_form = LoginForm()
     return render_template(
-        'index.html', title='SlyMoose', login=login)
+        'index.html', title='SlyMoose', **locals())
 
 
-@app.route('/games/', defaults={'category_name': 'index'})
+@app.route('/games/')
 @app.route('/games/play/<string:game_name>', endpoint='games.play')
 @app.route('/games/<category_name>')
 def games(**kwargs):
-    login = LoginForm()
+    login_form = LoginForm()
     game = None
     pages = None
     if kwargs:
@@ -82,25 +84,29 @@ def games(**kwargs):
                 return redirect(url_for('games'))
             category = Category.query.filter(Category.slug == category_name).first()
             try:
-                pages = category.pages
+                return render_template('game_category.html', **locals())
             except AttributeError:
                 pass
         if game_name:
             game = Pages.query.filter(Pages.slug == game_name).first()
-
-    return render_template('games.html', login=login, game=game, pages=pages)
-
-
-@app.route('/images/')
-def images():
-    login = LoginForm()
-    return render_template('page.html', login=login)
+            return render_template('play_game.html', **locals())
+    return render_template('games.html', **locals())
 
 
-@app.route('/videos/')
-def videos():
-    login = LoginForm()
-    return render_template('page.html', login=login)
+@app.route('/images/', defaults={'category_name': 'index'})
+@app.route('/images/view/<string:image_name>', endpoint='images.view')
+@app.route('/images/<category_name>')
+def images(**kwargs):
+    login_form = LoginForm()
+    return render_template('page.html', **locals())
+
+
+@app.route('/videos/', defaults={'category_name': 'index'})
+@app.route('/videos/watch/<string:video_name>', endpoint='videos.watch')
+@app.route('/videos/<category_name>')
+def videos(**kwargs):
+    login_form = LoginForm()
+    return render_template('page.html', **locals())
 
 
 @app.route('/logout')
@@ -118,12 +124,12 @@ def login():
     if is_logged_in():
         flash('Already logged in')
         return redirect(url_for('index'))
-    login = LoginForm()
-    if login.validate_on_submit():
-        login_user(login.user)
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        login_user(login_form.user)
         flash('Logged in successfully')
         return redirect(request.args.get('next') or url_for('index'))
-    return render_template('login.html', login=login)
+    return render_template('login.html', **locals())
 
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -131,19 +137,10 @@ def register():
     if is_logged_in():
         flash("Can't register twice!")
         return redirect(url_for('index'))
-    login = LoginForm()
+    login_form = LoginForm()
     registration = RegistrationForm()
     if registration.validate_on_submit():
-        user = User(
-            registration.username.data,
-            registration.email.data,
-            registration.password.data)
-        db.session.add(user)
-        flash('Thanks for registering')
-        try:
-            db.session.commit()
-        except IntegrityError:
-            registration.email.errors.append('Email Already in Use')
-            return render_template('register.html', registration=registration, login=login)
         return redirect(url_for('login'))
-    return render_template('register.html', registration=registration, login=login)
+    else:
+        return render_template('register.html', **locals())
+    return render_template('register.html', **locals())

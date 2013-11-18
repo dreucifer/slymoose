@@ -1,14 +1,5 @@
 {% extends 'layout.html' %}
 {% block title %}{{ request.endpoint|title }}{% endblock title %}
-{% block navigation %}
-    {% with categories = get_categories(request.endpoint) %}
-    <ul class='nav nav-pills'>
-        {% for category in categories %}
-        <li><a href='{{ url_for(request.endpoint, category_name=category.slug) }}'>{{ category }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endwith %}
-{% endblock navigation %}
 {% block content %}
     <h1>{{ request.endpoint|title }}</h1>
 {% endblock content %}
