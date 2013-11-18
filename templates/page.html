@@ -2,4 +2,5 @@
 {% block title %}{{ request.endpoint|title }}{% endblock title %}
 {% block content %}
     <h1>{{ request.endpoint|title }}</h1>
+    {{ contents|markdown }}
 {% endblock content %}
