@@ -12,15 +12,12 @@
 
 <body>
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-info">
             {% for message in messages %}
-            <p>
+            <div class='alert alert-info alert-dismissible'>
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message }}
-            </p>
+            </div>
             {% endfor %}
-        </div>
-        {% endif %}
     {% endwith %}
     <header class='container'>
         {% block header %}
@@ -32,11 +29,15 @@
             </div>
             <div class='navbar-form navbar-right'>
                 <form class='form-inline' role='form' method='POST' action='/login'>
+                    {% if not is_logged_in() %}
                     {{ login.csrf_token }}
                     {{ render_login(login.username, class_='form-control imput-sm', placeholder='Username') }}
                     {{ render_login(login.password, class_='form-control imput-sm', placeholder='Password') }}
-                    <button class='btn btn-default btn-sm input-sm' type='submit'>login</button>
+                    <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
                     <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
+                    {% else %}
+                    <a class='btn btn-default btn-sm input-sm' href='{{ url_for('logout') }}'>log out <span class='.glyphicon .glyphicon-log-out'></span></a>
+                    {% endif %}
                 </form>
             </div>
             <br class='clear'>
@@ -56,7 +57,7 @@
         {% block navigation %}{% endblock navigation %}
     </header>
 
-    <div class='container'>
+    <div id='content' class='container'>
         {% block content %}
         {% endblock content %}
     </div>
@@ -67,9 +68,9 @@
         </div>
     </footer>
 
-    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
     <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}'></script>
     <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
 </body>
 </html>
 

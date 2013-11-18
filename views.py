@@ -24,8 +24,21 @@ admin.add_view(AdminModelView(Category, db.session))
 admin.add_view(AdminModelView(User, db.session))
 
 def goodrule(rule):
-    return (
-        len((rule.defaults or [])) >= len(rule.arguments)) and 'admin' not in str(rule) and rule.redirect_to is None
+    response = True
+    if not (len((rule.defaults or [])) >= len(rule.arguments)):
+        response = False
+    if 'admin' in str(rule) or rule.endpoint == 'static':
+        response = False
+    if rule.redirect_to is not None:
+        response = False
+    if is_logged_in():
+        if rule.endpoint == 'login' or rule.endpoint == 'register':
+            response = False
+    else:
+        if rule.endpoint == 'logout':
+            response = False
+
+    return response
 
 
 @app.template_global()
@@ -41,6 +54,11 @@ def get_categories(endpoint):
             or []), key=lambda x: x.slug)
 
 
+@app.template_global()
+def is_logged_in():
+    return current_user.is_authenticated()
+
+
 @app.route('/')
 def index():
     login = LoginForm()
@@ -49,19 +67,28 @@ def index():
 
 
 @app.route('/games/', defaults={'category_name': 'index'})
-@app.route('/games/play/<string:game_name>')
-@app.route('/games/play/<int:game_id>')
+@app.route('/games/play/<string:game_name>', endpoint='games.play')
 @app.route('/games/<category_name>')
 def games(**kwargs):
     login = LoginForm()
+    game = None
+    pages = None
     if kwargs:
         category_name = kwargs.get('category_name', None)
         game_id = kwargs.get('game_id', None)
         game_name = kwargs.get('game_name', None)
-        if category_name:
+        if category_name is not None:
             if category_name == 'play':
                 return redirect(url_for('games'))
-    return render_template('games.html', login=login)
+            category = Category.query.filter(Category.slug == category_name).first()
+            try:
+                pages = category.pages
+            except AttributeError:
+                pass
+        if game_name:
+            game = Pages.query.filter(Pages.slug == game_name).first()
+
+    return render_template('games.html', login=login, game=game, pages=pages)
 
 
 @app.route('/images/')
@@ -78,13 +105,19 @@ def videos():
 
 @app.route('/logout')
 def logout():
-    logout_user()
-    flash('Logged out successfully')
+    if not is_logged_in():
+        flash('Not logged in')
+    else:
+        flash('Logged out successfully')
+        logout_user()
     return redirect(url_for('login'))
 
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
+    if is_logged_in():
+        flash('Already logged in')
+        return redirect(url_for('index'))
     login = LoginForm()
     if login.validate_on_submit():
         login_user(login.user)
@@ -95,6 +128,9 @@ def login():
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
+    if is_logged_in():
+        flash("Can't register twice!")
+        return redirect(url_for('index'))
     login = LoginForm()
     registration = RegistrationForm()
     if registration.validate_on_submit():

@@ -11,3 +11,5 @@
 .navbar-default .navbar-fixed-bottom { background: black; }
 body { background: rgb(255, 169, 0); padding-bottom: 50px; }
 nav.navbar { background: rgba(103, 107, 4, .5); border-color: rgb(103, 107, 4); }
+header { padding-top: 1em; }
+#content.container { padding-bottom: 1em; }

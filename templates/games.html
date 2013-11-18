@@ -10,5 +10,17 @@
     {% endwith %}
 {% endblock navigation %}
 {% block content %}
+    {% if game %}
+    <h1>{{ game.slug|title }}</h1>
+    {{ game.content|safe }}
+
+    {% else %}
     <h1>{{ request.endpoint|title }}</h1>
+
+    {% if pages %}
+        {% for page in pages %}
+        <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page }}</a>
+        {% endfor %}
+    {% endif %}
+    {% endif %}
 {% endblock content %}
