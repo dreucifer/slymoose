@@ -109,6 +109,13 @@ def videos(**kwargs):
     return render_template('page.html', **locals())
 
 
+@app.route('/privacy-policy', endpoint='privacy-policy')
+def privacy():
+    content = 'Privacy Policy'
+    login_form = LoginForm()
+    return render_template('page.html', **locals())
+
+
 @app.route('/logout')
 def logout():
     if not is_logged_in():
