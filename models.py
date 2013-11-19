@@ -63,17 +63,19 @@ class Category(db.Model):
     slug = db.Column(db.String(50), unique=True)
     endpoint = db.Column(db.String(25))
     description = db.Column(db.Text)
-    pages = db.relationship('Pages', backref='category', lazy='dynamic')
+    pages = db.relationship('Page', backref='category', lazy='dynamic')
 
     def __unicode__(self):
         return self.slug.title()
 
 
-class Pages(db.Model):
+class Page(db.Model):
+    __tablename__ = 'pages'
     id_ = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(25), unique=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id_'))
     content = db.Column(db.Text)
+    article = db.relationship('Article', backref='page', uselist=False)
 
     def __unicode__(self):
         return self.slug.title()
@@ -96,7 +98,7 @@ class User(db.Model, UserMixin):
         self.active = False
 
     def __repr__(self):
-        return 'Users'
+        return "<Users(%s, %s)>" % (self.username, self.email)
 
     def __unicode__(self):
         return self.username
@@ -105,3 +107,25 @@ class User(db.Model, UserMixin):
         if self.password == password:
             return True
         return False
+
+
+class Article(db.Model):
+    __tablename__ = 'articles'
+    id_ = db.Column(db.Integer, primary_key=True)
+    page_id = db.Column(db.Integer, db.ForeignKey('pages.id_'))
+
+    seo_title = db.Column(db.String(67))
+    seo_description = db.Column(db.String(150))
+    seo_keywords = db.Column(db.String(150))
+
+    title = db.Column(db.String(70))
+    fold = db.Column(db.Text)
+    cut = db.Column(db.Text)
+
+    post_date = db.Column(db.DateTime)
+
+    def __unicode__(self):
+        return self.seo_title
+
+    def get_title(self):
+        return self.title

@@ -1,7 +1,17 @@
 {% extends 'page.html' %}
+{% block title %}{{ article.seo_title }}{% endblock title %}
+{% block meta_keywords %}{{ article.seo_keywords }}{% endblock meta_keywords %}
+{% block meta_description %}{{ article.seo_description }}{% endblock meta_description %}
 {% block content %}
-    {% if game %}
-        <h1>{{ game.slug|title }}</h1>
-        {{ game.content|markdown }}
+    {% if article %}
+        <h1>{{ article.title|title }}</h1>
+        {% if game %}
+        <center>
+            {{ game.content|safe }}
+        </center>
+        <br>
+        {% endif %}
+        {{ article.fold|markdown }}
+        {{ article.cut|markdown }}
     {% endif %}
 {% endblock %}

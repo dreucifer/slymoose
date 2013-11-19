@@ -3,7 +3,7 @@ from flask.ext.admin import Admin, AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.login import login_user, logout_user, current_user
 from slymoose import app, db
-from slymoose.models import Pages, Category, User
+from slymoose.models import Page, Category, User, Article
 from slymoose.forms import RegistrationForm, LoginForm
 
 
@@ -18,9 +18,10 @@ class AdminView(AdminIndexView):
 
 
 admin = Admin(app, index_view=AdminView())
-admin.add_view(AdminModelView(Pages, db.session))
+admin.add_view(AdminModelView(Page, db.session))
 admin.add_view(AdminModelView(Category, db.session))
 admin.add_view(AdminModelView(User, db.session))
+admin.add_view(AdminModelView(Article, db.session))
 
 def goodrule(rule):
     response = True
@@ -88,7 +89,8 @@ def games(**kwargs):
             except AttributeError:
                 pass
         if game_name:
-            game = Pages.query.filter(Pages.slug == game_name).first()
+            game = Page.query.filter(Page.slug == game_name).first()
+            article = game.article
             return render_template('play_game.html', **locals())
     return render_template('games.html', **locals())
 
@@ -98,6 +100,7 @@ def games(**kwargs):
 @app.route('/images/<category_name>')
 def images(**kwargs):
     login_form = LoginForm()
+    contents = ''
     return render_template('page.html', **locals())
 
 
@@ -106,6 +109,7 @@ def images(**kwargs):
 @app.route('/videos/<category_name>')
 def videos(**kwargs):
     login_form = LoginForm()
+    contents = ''
     return render_template('page.html', **locals())
 
 

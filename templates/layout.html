@@ -6,87 +6,87 @@
     <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset='utf-8' />
+    <meta name='keywords' content='{% block meta_keywords %}{% endblock meta_keywords %}'>
+    <meta name='description' content='{% block meta_description %}{% endblock meta_description %}'>
     <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/bootstrap.min.css') }}'>
     <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/bootstrap-theme.min.css') }}'>
     <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='css/main.css') }}'>
     </head>
-
-<body>
-<div id="wrapper">
-    {% with messages = get_flashed_messages() %}
-    {% for message in messages %}
-    <div class='alert alert-info alert-dismissible'>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endwith %}
-    <center>
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- slymoose leader -->
-        <ins class="adsbygoogle"
-            style="display:inline-block;width:728px;height:90px;"
-            data-ad-client="ca-pub-0510803526364802"
-            data-ad-slot="4530671154"></ins>
-        <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </center>
-    <header class='container'>
-        {% block header %}
-        <nav class='navbar navbar-default' role='navigation'>
-            <div class='navbar-header'>
-                <a class='navbar-brand' href='{{ url_for('index') }}'>
-                    <img alt='slymoose logo' src='{{ url_for('static', filename='img/slymoose.png') }}'>
-                </a>
+    <body>
+        <div id="wrapper">
+            {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+            <div class='alert alert-info alert-dismissible'>
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
             </div>
-            <div class='navbar-form navbar-right'>
-                <form class='form-inline' role='form' method='POST' action='/login'>
-                    {% if not is_logged_in() %}
-                        {{ login_form.csrf_token }}
-                        {{ render_login(login_form.username, class_='form-control imput-sm', placeholder='Username') }}
-                        {{ render_login(login_form.password, class_='form-control imput-sm', placeholder='Password') }}
-                        <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
-                        <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
-                    {% else %}
-                        <a class='btn btn-default btn-sm input-sm' href='{{ url_for('logout') }}'>log out <span class='.glyphicon .glyphicon-log-out'></span></a>
-                    {% endif %}
-                </form>
+            {% endfor %}
+            {% endwith %}
+            <center>
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- slymoose leader -->
+                <ins class="adsbygoogle"
+                    style="display:inline-block;width:728px;height:90px;"
+                    data-ad-client="ca-pub-0510803526364802"
+                    data-ad-slot="4530671154"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </center>
+            <header class='container'>
+                {% block header %}
+                <nav class='navbar navbar-default' role='navigation'>
+                    <div class='navbar-header'>
+                        <a class='navbar-brand' href='{{ url_for('index') }}'>
+                            <img alt='slymoose logo' src='{{ url_for('static', filename='img/slymoose.png') }}'>
+                        </a>
+                    </div>
+                    <div class='navbar-form navbar-right'>
+                        <form class='form-inline' role='form' method='POST' action='/login'>
+                            {% if not is_logged_in() %}
+                                {{ login_form.csrf_token }}
+                                {{ render_login(login_form.username, class_='form-control imput-sm', placeholder='Username') }}
+                                {{ render_login(login_form.password, class_='form-control imput-sm', placeholder='Password') }}
+                                <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
+                                <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
+                            {% else %}
+                                <a class='btn btn-default btn-sm input-sm' href='{{ url_for('logout') }}'>log out <span class='.glyphicon .glyphicon-log-out'></span></a>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <br class='clear'>
+                    <ul class='nav nav-pills navbar-nav'>
+                        {% for link in get_links() %}
+                        {% if link.endpoint == 'index' %}
+                        <li><a href='{{ url_for(link.endpoint) }}'>Home</a></li>
+                        {% else %}
+                        <li><a href='{{ url_for(link.endpoint) }}'>{{ link.endpoint|title }}</a></li>
+                        {% endif %}
+                        {% else %}
+                        <li><a href='{{ url_for('index') }}'>Home</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+                {% endblock header %}
+                {% block navigation %}
+                    {{ render_categories(request.endpoint) }}
+                {% endblock navigation %}
+            </header>
+
+            <div id='content' class='container'>
+                {% block content %}
+                {% endblock content %}
             </div>
-            <br class='clear'>
-            <ul class='nav nav-pills navbar-nav'>
-                {% for link in get_links() %}
-                {% if link.endpoint == 'index' %}
-                <li><a href='{{ url_for(link.endpoint) }}'>Home</a></li>
-                {% else %}
-                <li><a href='{{ url_for(link.endpoint) }}'>{{ link.endpoint|title }}</a></li>
-                {% endif %}
-                {% else %}
-                <li><a href='{{ url_for('index') }}'>Home</a></li>
-                {% endfor %}
-            </ul>
-        </nav>
-        {% endblock header %}
-        {% block navigation %}
-            {{ render_categories(request.endpoint) }}
-        {% endblock navigation %}
-    </header>
-
-    <div id='content' class='container'>
-        {% block content %}
-        {% endblock content %}
-    </div>
-</div>
-
-    <footer class='footer'>
-        <div class='container'>
-            copyright &copy; 2013, SlyMoose.com. All rights reserved. Trade marks and trade names used for reference purpose only. We also use tracking cookies, please look at our Privacy Policy 
         </div>
-    </footer>
 
-    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}'></script>
-    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}'></script>
-    <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
-</body>
+        <footer class='footer'>
+            <div class='container'>
+                copyright &copy; 2013, SlyMoose.com. All rights reserved. Trade marks and trade names used for reference purpose only. We also use tracking cookies, please look at our Privacy Policy 
+            </div>
+        </footer>
+
+        <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}'></script>
+        <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}'></script>
+        <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
+    </body>
 </html>
-
