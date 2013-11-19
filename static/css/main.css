@@ -11,10 +11,11 @@
 .navbar-default .navbar-fixed-bottom { background: black; }
 body { background: rgb(255, 169, 0); }
 html, body { height: 100%; }
-nav.navbar { background: rgba(103, 107, 4, .5); border-color: rgb(103, 107, 4); }
+nav.navbar { background: rgba(103, 107, 4, .5); border-color: rgb(103, 107, 4); margin-bottom: 0; border-radius: 4px 4px 0 0;}
 header { padding-top: 1em; }
 #content.container { overflow: auto; padding-bottom: 8em; }
 #wrapper { min-height: 100%; height: auto; margin-bottom: -8em; }
 .footer { height: 8em; background: #303030; clear: both; }
 .footer > .container { padding: 1em; }
-#categories > li > a { height: 1.5em; }
+#categories > li > a { height: 1.5em; padding: 0px 1em; border-radius: 0 0 0 0; }
+#categories { background: #303030; border: 1px solid #000000; border-top: 0; }

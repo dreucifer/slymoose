@@ -4,7 +4,7 @@
 {% block meta_description %}{{ article.seo_description }}{% endblock meta_description %}
 {% block content %}
     {% if article %}
-        <h1>{{ article.title|title }}</h1>
+        <h1>{{ article.title }}</h1>
         {% if game %}
         <center>
             {{ game.content|safe }}

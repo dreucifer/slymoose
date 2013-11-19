@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
-{% block title %}{{ title }}{% endblock title %}
+{% block title %}{{ article.seo_title }}{% endblock title %}
 {% block content %}
-    <h1>{{ title }}</h1>
+    <h1>{{ article.title }}</h1>
+    {{ article.fold|markdown }}
+    {{ article.cut|markdown }}
 {% endblock content %}

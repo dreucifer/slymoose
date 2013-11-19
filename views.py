@@ -54,7 +54,7 @@ def get_categories(endpoint):
                 or []), key=lambda x: x.slug)
     else:
         return sorted(
-                (Category.query.all() or []), key=lambda x: x.slug)
+                (Category.query.filter(Category.endpoint != 'index').all() or []), key=lambda x: x.slug)
 
 
 @app.template_global()
@@ -65,8 +65,9 @@ def is_logged_in():
 @app.route('/')
 def index():
     login_form = LoginForm()
-    return render_template(
-        'index.html', title='SlyMoose', **locals())
+    page = Page.query.filter(Page.slug == request.endpoint).first()
+    article = page.article[0]
+    return render_template('index.html', **locals())
 
 
 @app.route('/games/')
@@ -90,7 +91,7 @@ def games(**kwargs):
                 pass
         if game_name:
             game = Page.query.filter(Page.slug == game_name).first()
-            article = game.article
+            article = game.article[0]
             return render_template('play_game.html', **locals())
     return render_template('games.html', **locals())
 
