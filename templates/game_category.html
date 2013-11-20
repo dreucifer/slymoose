@@ -1,9 +1,9 @@
 {% extends 'page.html' %}
 {% block content %}
     <h1>{{ category_name|title }} Games</h1>
-    {% if category.pages %}
-        {% for page in category.pages %}
-        <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page }}</a>
+    {% if pages %}
+        {% for page in pages %}
+        <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page.article.title }}</a>
         {% endfor %}
     {% endif %}
 {% endblock %}

@@ -1,6 +1,45 @@
 {% extends 'layout.html' %}
 {% block title %}{{ article.seo_title }}{% endblock title %}
+{% block meta_keywords %}{{ article.seo_keyword }}{% endblock meta_keywords %}
+{% block meta_description %}{{ article.seo_description }}{% endblock meta_description %}
 {% block content %}
+<div class='row'>
+    <div class='col-md-6'>
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style='background: #505050; color: #f0f0f0; padding: 1em;' data-interval=false>
+            <!-- Title and Controls -->
+            <div class='carousel-header'>
+                <b>Featured Articles</b>
+                <span style='float: right;'>
+                    <a href="#carousel-example-generic" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a href="#carousel-example-generic" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </span>
+            </div>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div>
+                        {{ article.title }}
+                        {{ article.fold|markdown }}
+                    </div>
+                </div>
+                {% for feature in featured %}
+                <div class="item">
+                    <div>
+                        {{ feature }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        &nbsp;
+    </div>
+</div>
     <h1>{{ article.title }}</h1>
     {{ article.fold|markdown }}
     {{ article.cut|markdown }}

@@ -75,7 +75,6 @@ class Page(db.Model):
     slug = db.Column(db.String(25), unique=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id_'))
     content = db.Column(db.Text)
-    article = db.relationship('Article', backref='page')
 
     def __unicode__(self):
         return self.slug.title()
@@ -113,6 +112,7 @@ class Article(db.Model):
     __tablename__ = 'articles'
     id_ = db.Column(db.Integer, primary_key=True)
     page_id = db.Column(db.Integer, db.ForeignKey('pages.id_'))
+    page = db.relationship('Page', backref=db.backref('article'), uselist=False)
 
     seo_title = db.Column(db.String(67))
     seo_description = db.Column(db.String(150))
