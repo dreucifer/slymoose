@@ -29,7 +29,8 @@
                 {% for feature in featured %}
                 <div class="item">
                     <div>
-                        {{ feature }}
+                        {{ feature.article[0].title }}
+                        {{ feature.article[0].fold|markdown }}
                     </div>
                 </div>
                 {% endfor %}
