@@ -22,15 +22,24 @@
             <div class="carousel-inner">
                 <div class="item active">
                     <div>
+                        {% if article %}
                         {{ article.title }}
                         {{ article.fold|markdown }}
+                        {% else %}
+                        Welcome
+                        {% endif %}
                     </div>
                 </div>
                 {% for feature in featured %}
                 <div class="item">
                     <div>
-                        {{ feature.article[0].title }}
-                        {{ feature.article[0].fold|markdown }}
+
+                        {% if feature.article %}
+                            {{ feature.article.title }}
+                            {{ feature.article.fold|markdown }}
+                        {% else %}
+                        feature
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -42,6 +51,8 @@
     </div>
 </div>
     <h1>{{ article.title }}</h1>
+    {% if article %}
     {{ article.fold|markdown }}
     {{ article.cut|markdown }}
+    {% endif %}
 {% endblock content %}

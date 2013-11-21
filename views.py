@@ -75,14 +75,14 @@ def get_page_article(endpoint):
     page = Page.query.filter(Page.slug == endpoint).first()
     if page is None:
         return None, None
-    article = (page.article or [])[0]
+    article = page.article
     return page, article
 
 
 @app.route('/')
 def index():
     login_form = LoginForm()
-    featured = Page.query.filter(Page.category_id != None).limit(4)
+    featured = Page.query.filter(Page.category_id != None).limit(4).all()
     page, article = get_page_article(request.endpoint)
     return render_template('index.html', **locals())
 
