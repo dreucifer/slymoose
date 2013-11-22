@@ -3,7 +3,11 @@
     <h1>{{ category_name|title }} Games</h1>
     {% if pages %}
         {% for page in pages %}
-        <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page.article.title }}</a>
+            {% if page.article[0] %}
+                <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page.article[0].title }}</a>
+            {% else %}
+                <a href='{{ url_for('games.play', game_name=page.slug) }}'>{{ page.slug|title }}</a>
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endblock %}

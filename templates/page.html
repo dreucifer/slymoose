@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block title %}{{ request.endpoint|title }}{% endblock title %}
 {% block content %}
-    {% if article %}
-        <h1>{{ article.title }}</h1>
-        {{ article.fold|markdown }}
-        {{ article.cut|markdown }}
+    {% if article[0] %}
+        <h1>{{ article[0].title }}</h1>
+        {{ article[0].fold|markdown }}
+        {{ article[0].cut|markdown }}
     {% endif %}
 {% endblock content %}

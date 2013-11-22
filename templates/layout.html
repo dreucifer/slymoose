@@ -14,6 +14,7 @@
     <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}'></script>
     <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}'></script>
     <script type='text/javascript' src='{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}'></script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </head>
     <body>
         <div id="wrapper">
@@ -26,15 +27,11 @@
             {% endfor %}
             {% endwith %}
             <center>
-                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <!-- slymoose leader -->
                 <ins class="adsbygoogle"
                     style="display:inline-block;width:728px;height:90px;"
                     data-ad-client="ca-pub-0510803526364802"
                     data-ad-slot="4530671154"></ins>
-                <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
             </center>
             <header class='container'>
                 {% block header %}
@@ -48,8 +45,8 @@
                         <form class='form-inline' role='form' method='POST' action='/login'>
                             {% if not is_logged_in() %}
                                 {{ login_form.csrf_token }}
-                                {{ render_login(login_form.username, class_='form-control imput-sm', placeholder='Username') }}
-                                {{ render_login(login_form.password, class_='form-control imput-sm', placeholder='Password') }}
+                                {{ render_login(login_form.username, class_='form-control input-sm', placeholder='Username') }}
+                                {{ render_login(login_form.password, class_='form-control input-sm', placeholder='Password') }}
                                 <button class='btn btn-default btn-sm input-sm' type='submit'>log in <span class='.glyphicon .glyphicon-log-in'></span></button>
                                 <a class='btn btn-default btn-sm input-sm' href='{{ url_for('register') }}'>register</a>
                             {% else %}
@@ -88,5 +85,26 @@
             </div>
         </footer>
 
+        <!-- Piwik -->
+        <script type="text/javascript">
+            var _paq = _paq || [];
+            _paq.push(["trackPageView"]);
+            _paq.push(["enableLinkTracking"]);
+
+            (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") + "://alternatorparts.com/analytics/";
+            _paq.push(["setTrackerUrl", u+"piwik.php"]);
+            _paq.push(["setSiteId", "6"]);
+            var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+            g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+        <!-- End Piwik Code -->
+        <!-- Piwik Image Tracker -->
+        <img src="http://alternatorparts.com/analytics/piwik.php?idsite=6&amp;rec=1" style="border:0" alt="" />
+        <!-- End Piwik -->
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </body>
 </html>

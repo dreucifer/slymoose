@@ -1,16 +1,11 @@
 {% extends 'layout.html' %}
-{% from '_formhelpers.html' import render_field %}
+{% from '_formhelpers.html' import registration_form %}
 
 {% block content %}
-<form method='POST'>
-    <dl class='form-group'>
-        {{ registration.csrf_token }}
-        {{ render_field(registration.email, class='form-control') }}
-        {{ render_field(registration.username, class='form-control') }}
-        {{ render_field(registration.password, class='form-control') }}
-        {{ render_field(registration.confirm, class='form-control') }}
-        {{ render_field(registration.accept_tos, class='form-control') }}
-    </dl>
-    <p><input type='submit' class='btn btn-default btn-small' value='Register'></p>
-</form>
+<div class='row'>
+    <div class='col-md-offset-3 col-md-6'>
+        {{ registration_form(registration) }}
+    </div>
+</div>
+<br>
 {% endblock content %}

@@ -1,6 +1,8 @@
+import os.path as op
 from flask import render_template, redirect, url_for, flash, request
 from flask.ext.admin import Admin, AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.admin.contrib.fileadmin import FileAdmin
 from flask.ext.login import login_user, logout_user, current_user
 from slymoose import app, db
 from slymoose.models import Page, Category, User, Article
@@ -11,9 +13,11 @@ class AdminModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
+
 class CategoryModelView(AdminModelView):
     form_create_rules = ('slug', 'endpoint', 'description')
     form_edit_rules = ('slug', 'endpoint', 'description')
+
 
 class PageModelView(AdminModelView):
     form_create_rules = ('slug', 'category', 'content')
@@ -24,12 +28,19 @@ class AdminView(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
+class FileAdminView(FileAdmin):
+    def is_accessible(self):
+        return current_user.is_authenticated()
 
+
+path = op.join(op.dirname(__file__), 'static')
 admin = Admin(app, index_view=AdminView())
 admin.add_view(PageModelView(Page, db.session))
 admin.add_view(CategoryModelView(Category, db.session))
 admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(Article, db.session))
+admin.add_view(FileAdminView(path, '/static/', name='Static Files'))
+
 
 def goodrule(rule):
     response = True
@@ -82,6 +93,9 @@ def get_page_article(endpoint):
 @app.route('/')
 def index():
     login_form = LoginForm()
+    registration = RegistrationForm()
+    welcome_user = """
+    """
     featured = Page.query.filter(Page.category_id != None).limit(4).all()
     page, article = get_page_article(request.endpoint)
     return render_template('index.html', **locals())
@@ -104,10 +118,7 @@ def games(**kwargs):
                 return redirect(url_for('games'))
             category = Category.query.filter(Category.slug == category_name).first()
             pages = category.pages.all()
-            try:
-                return render_template('game_category.html', **locals())
-            except AttributeError:
-                pass
+            return render_template('game_category.html', **locals())
         if game_name:
             game = Page.query.filter(Page.slug == game_name).first()
             article = game.article
@@ -115,7 +126,7 @@ def games(**kwargs):
     return render_template('page.html', **locals())
 
 
-@app.route('/images/', defaults={'category_name': 'index'})
+@app.route('/images/')
 @app.route('/images/view/<string:image_name>', endpoint='images.view')
 @app.route('/images/<category_name>')
 def images(**kwargs):
@@ -124,7 +135,7 @@ def images(**kwargs):
     return render_template('page.html', **locals())
 
 
-@app.route('/videos/', defaults={'category_name': 'index'})
+@app.route('/videos/')
 @app.route('/videos/watch/<string:video_name>', endpoint='videos.watch')
 @app.route('/videos/<category_name>')
 def videos(**kwargs):
@@ -172,6 +183,4 @@ def register():
     registration = RegistrationForm()
     if registration.validate_on_submit():
         return redirect(url_for('login'))
-    else:
-        return render_template('register.html', **locals())
     return render_template('register.html', **locals())
