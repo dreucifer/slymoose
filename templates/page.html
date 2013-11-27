@@ -1,9 +1,55 @@
 {% extends 'layout.html' %}
-{% block title %}{{ request.endpoint|title }}{% endblock title %}
+{% block title %}
+    {% if article %}
+        {{ article[0].seo_title }}
+    {% else %}
+        {{ request.endpoint|title }}
+    {% endif %}
+{% endblock title %}
+
+{% if article %}
+    {% block description %}
+        {{ article[0].seo_description }}
+    {% endblock description %}
+    {% block keywords %}
+        {{ article[0].seo_keywords }}
+    {% endblock keywords %}
+{% endif %}
+
 {% block content %}
-    {% if article[0] %}
+<ol class='breadcrumb'>
+    <li><a href='{{ url_for('index') }}'>Home</a></li>
+    <li class='active'>{{ request.endpoint|title }}</li>
+</ol>
+
+<div class='row' style='height: 300px;'>
+    <div class='col-md-4' style='height: 100%;'>
+        <b>Feature</b>
+    </div>
+    <div class='col-md-4' style='height: 100%;'>
+        <div class='row' style='height: 50%;'>
+            <b>Stacked Feature 1</b>
+        </div>
+        <div class='row' style='height: 50%;'>
+            <b>Stacked Feature 2</b>
+        </div>
+    </div>
+    <div class='col-md-4'>
+        ADVERTISEMENT:
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:300px;height:250px"
+            data-ad-client="ca-pub-0510803526364802"
+            data-ad-slot="8649486357">
+        </ins>
+    </div>
+</div>
+    {% if article %}
         <h1>{{ article[0].title }}</h1>
         {{ article[0].fold|markdown }}
         {{ article[0].cut|markdown }}
+    {% else %}
+        {% if content %}
+            {{ content }}
+        {% endif %}
     {% endif %}
 {% endblock content %}

@@ -73,6 +73,7 @@ class Page(db.Model):
     __tablename__ = 'pages'
     id_ = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(25), unique=True)
+    thumbnail = db.Column(db.String(75))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id_'))
     content = db.Column(db.Text)
 

@@ -21,7 +21,6 @@ class CategoryModelView(AdminModelView):
 
 class PageModelView(AdminModelView):
     form_create_rules = ('slug', 'category', 'content')
-    form_edit_rules = ('slug', 'category', 'content')
 
 
 class AdminView(AdminIndexView):
@@ -44,9 +43,11 @@ admin.add_view(FileAdminView(path, '/static/', name='Static Files'))
 
 def goodrule(rule):
     response = True
+    nogo = ['static', 'login', 'logout', 'register']
     if not (len((rule.defaults or [])) >= len(rule.arguments)):
         response = False
-    if 'admin' in str(rule) or rule.endpoint == 'static':
+    if ('admin' in str(rule) or
+        rule.endpoint in nogo):
         response = False
     if rule.redirect_to is not None:
         response = False
@@ -94,7 +95,7 @@ def get_page_article(endpoint):
 def index():
     login_form = LoginForm()
     registration = RegistrationForm()
-    welcome_user = """
+    welcome_user = """##test
     """
     featured = Page.query.filter(Page.category_id != None).limit(4).all()
     page, article = get_page_article(request.endpoint)
@@ -106,7 +107,6 @@ def index():
 @app.route('/games/<category_name>')
 def games(**kwargs):
     login_form = LoginForm()
-    page, article = get_page_article(request.endpoint)
     game = None
     pages = None
     if kwargs:

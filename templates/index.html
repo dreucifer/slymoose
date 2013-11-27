@@ -9,7 +9,7 @@
 </style>
 
 <div class='row'>
-    <div class='col-md-5'>
+    <div class='col-md-6'>
         <div id="carousel-features" class="carousel slide" data-ride="carousel" data-interval=false>
             <!-- Title and Controls -->
             <div class='carousel-header'>
@@ -33,24 +33,19 @@
                         {% else %}
                         Welcome
                         {% endif %}
-                        {% if is_logged_in() %}
-                        <a href='{{ url_for('games') }}' class='btn btn-default btn-sm btn-danger'>Games</a>
-                        <a href='{{ url_for('images') }}' class='btn btn-default btn-sm btn-danger'>Images</a>
-                        <a href='{{ url_for('videos') }}' class='btn btn-default btn-sm btn-danger'>Videos</a>
-                        {% else %}
-                        <a href='{{ url_for('login') }}' class='btn btn-default btn-sm btn-danger'>Login</a>
-                        <a href='{{ url_for('register') }}' class='btn btn-default btn-sm btn-warning'>Register</a>
-                        {% endif %}
+                        <a href='{{ url_for('games') }}' class='btn btn-default btn-danger'>Games</a>
+                        <a href='{{ url_for('images') }}' class='btn btn-default btn-danger'>Images</a>
+                        <a href='{{ url_for('videos') }}' class='btn btn-default btn-danger'>Videos</a>
                     </div>
                 </div>
                 {% for feature in featured %}
-                <div class="item" style="background-image: url('/static/img/game_screenshot.jpg')">
+                <div class="item" style="background-image: url({{ url_for('static', filename=feature.thumbnail) }})">
                     <div>
                         {% if feature.article %}
                         {% if feature.article[0] %}
                         <b><a href='{{ url_for('games.play', game_name=feature.slug) }}'>{{ feature.article[0].title }}</a></b>
                         {{ feature.article[0].fold|markdown }}
-                        <a href='{{ url_for('games.play', game_name=feature.slug) }}' class='btn btn-default btn-sm btn-danger'>Play Now!</a>
+                        <a href='{{ url_for('games.play', game_name=feature.slug) }}' class='btn btn-default btn-danger'>Play Now!</a>
                         {% endif %}
                         {% endif %}
                     </div>
@@ -59,9 +54,9 @@
             </div>
         </div>
     </div>
-    <div class='col-md-7' style='padding-top: 0.5em;'>
+    <div class='col-md-6' style='padding-top: 0.5em;'>
         {% if is_logged_in() %}
-        {{ welcome_user }}
+        {{ welcome_user|markdown }}
         {% else %}
         <b>Register Now!</b>
         <br>
@@ -71,8 +66,8 @@
 </div>
 <br>
 <div class='row'>
-    {% for feature in featured[:1] %}
-    <div class='col-md-4'>
+    {% for feature in featured %}
+    <div class='col-md-4' style='background-image: url({{ url_for('static', filename=featured.thumbnail) }})'>
         {{ feature }}
     </div>
     {% endfor %}
@@ -89,11 +84,12 @@
 {% endif %}
 <svg height='0'>
     <mask id='fade-mask' maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-    <linearGradient id="gradient" gradientUnits="objectBoundingBox" x2="0" y2="1">
-    <stop class="begin" offset="0"/>
-    <stop class="end" offset="1"/>
-    </linearGradient>
-    <rect x="0" y="0" width="100" height="1" style="fill:url(#gradient)" />
+        <linearGradient id="gradient" gradientUnits="objectBoundingBox" x2="0" y2="1">
+            <stop class="begin" offset="0"/>
+            <stop class="middle" offset="0.8"/>
+            <stop class="end" offset="1"/>
+        </linearGradient>
+        <rect x="0" y="0" width="100" height="1" style="fill:url(#gradient)" />
     </mask>
 </svg>
 {% endblock content %}

@@ -7,25 +7,30 @@
 #carousel-features { background: #505050; color: #f0f0f0; padding: 0.5em 1em; }
 #categories > li > a { height: 1.5em; padding: 0px 1em; border-radius: 0 0 0 0; }
 #categories { background: #303030; border: 1px solid #000000; border-top: 0; }
-#content.container { overflow: auto; padding-bottom: 8em; }
-#wrapper { min-height: 100%; height: auto; margin-bottom: -8em; }
+#content.container { overflow: auto; padding-bottom: 1em; }
+#wrapper { min-height: 100%; height: auto; margin-bottom: -120px; padding-bottom: 120px; }
 .carousel-header > span { float: right; }
 .carousel-header { border-bottom: 1px dashed #ffffff; padding-bottom: 0.5em; margin-bottom: 0.5em; }
 .container { background: rgba(255, 255, 255, .75); }
 .footer > .container { padding: 1em; }
-.footer { height: 8em; background: #303030; clear: both; }
+.footer { height: 120px; background: #303030; clear: both; }
 .item > div > p { height: 6em; overflow: hidden; }
 .item > div { color: #303030; padding: 0.5em; width: 70%; position: absolute; bottom: 0.5em; right: 0.5em; background: rgba(256, 256, 256, 0.8); }
 .item { background: rgba(256,256,256,0.5); background-image: url('/static/img/moose-sign-alpha.png'); background-position: 50% 50%; background-repeat: no-repeat; padding: 0.5em; height: 15em; margin-bottom: 0.5em; }
+.navbar-right { margin: 0; padding: 0.25em 0.5em; }
 .navbar-bottom { position: absolute; bottom: 0; left: 130px; }
 .navbar-default .navbar-brand { padding: 0; font-weight: bold; color: rgb(60,27,40); text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25); }
 .navbar-default .navbar-fixed-bottom { background: black; }
 .navbar-default .navbar-nav > li > a { font-weight: bold; color: rgb(60,27,40); text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25); border-radius: 0; }
 .navbar-default .navbar-nav > li > a:hover { background: rgba(199, 36, 58, .4); }
-.registration > .tos { display: inline; margin: 0 0.5em; margin-bottom: 2px; }
+.registration > .tos { display: inline; margin: 0 0.5em; margin-bottom: 3px; }
+.registration { line-height: 10px; }
+label { margin-bottom: 1px; }
 body { background: rgb(255, 169, 0); }
+body, html { height: 100%; }
 header { padding-top: 1em; }
-html, body { height: 100%; }
 nav.navbar { background: rgba(103, 107, 4, .5); border-color: rgb(103, 107, 4); margin-bottom: 0; border-radius: 4px 4px 0 0;}
 stop.begin { stop-color: white; stop-opacity: 1; }
+stop.middle { stop-color: white; stop-opacity: 1; }
 stop.end { stop-color: white; stop-opacity: 0; }
+.btn-sm, .input-sm { height: 1.5em; padding: 0 0.5em; }
