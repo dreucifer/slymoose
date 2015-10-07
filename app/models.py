@@ -1,4 +1,4 @@
-from slymoose import db
+from . import db
 
 
 class UserMixin(object):

@@ -4,9 +4,9 @@ from flask.ext.admin import Admin, AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 from flask.ext.login import login_user, logout_user, current_user
-from slymoose import app, db
-from slymoose.models import Page, Category, User, Article
-from slymoose.forms import RegistrationForm, LoginForm
+from . import app, db
+from .models import Page, Category, User, Article
+from .forms import RegistrationForm, LoginForm
 
 
 class AdminModelView(ModelView):

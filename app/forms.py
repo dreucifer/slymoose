@@ -2,8 +2,8 @@ from flask import flash
 from sqlalchemy.exc import IntegrityError
 from flask_wtf import Form
 from wtforms import BooleanField, TextField, PasswordField, validators
-from slymoose import db
-from slymoose.models import User
+from . import db
+from .models import User
 
 class RegistrationForm(Form):
     username = TextField('Username', [validators.Length(min=4, max=25)])

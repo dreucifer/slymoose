@@ -11,7 +11,7 @@ markdown_manager = Markdown(app)
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
 
-import slymoose.views
+import views
 
 @login_manager.user_loader
 def load_user(userid):
